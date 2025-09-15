@@ -62,11 +62,11 @@ void loop() {
 
   // publicacao(); // Chamada da função publish
 
-  // {testeBuzzer();}
+  // testeBuzzer();
 
-  // {testeLed()}; 
+  testeLed(); 
 
-  // {testeBotao(pinButton);}
+  testeBotao(pinButton);
 
   Serial.print(F("Distancia lida: "));
   Serial.println(sonar.ping_cm());

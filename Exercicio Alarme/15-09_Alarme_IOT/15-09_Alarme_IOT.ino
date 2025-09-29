@@ -5,8 +5,8 @@
 
 #define BUZZER_PIN 27
 #define LED_VME_ALARME 13
-#define LED_AMA_ALARME 2
-#define LED_VDE_ALARME 4
+#define LED_AMA_ALARME 25
+#define LED_VDE_ALARME 33
 #define BOTAO_FISICO 26
 #define TRIG_PIN 12
 #define ECHO_PIN 14
@@ -107,8 +107,10 @@ void loop() {
 
   //ativação ou desativação do alarme
   if (alarmeAtivo && distancia > 0 && distancia < LIMITE_DISTANCIA) {
+    while(alarmeAtivo && distancia > 0 && distancia < LIMITE_DISTANCIA){
     ativarAlerta();
-  } else {
+    }
+  } else if(alarmeAtivo) {
     desligarAlerta();
   }
 

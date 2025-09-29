@@ -1,6 +1,6 @@
 void testeLed(){
-  digitalWrite(pinLed, HIGH);
+  digitalWrite(LED_VME_ALARME, HIGH);
   delay(500);
-  digitalWrite(pinLed, LOW);
+  digitalWrite(LED_VME_ALARME, LOW);
   delay(500);
 }

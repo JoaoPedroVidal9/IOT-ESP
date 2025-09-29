@@ -5,8 +5,8 @@
 
 #define BUZZER_PIN 27
 #define LED_VME_ALARME 13
-#define LED_AMA_ALARME 2
-#define LED_VDE_ALARME 4
+#define LED_AMA_ALARME 25
+#define LED_VDE_ALARME 33
 #define BOTAO_FISICO 26
 #define TRIG_PIN 12
 #define ECHO_PIN 14
@@ -33,7 +33,9 @@ AdafruitIO_Feed *distanciaultrassom = io.feed("distanciaultrassom");
 // Variáveis de controle
 bool alarmeAtivo = false;
 unsigned int distancia = 0;
+unsigned int velhaDist = 1;
 int LIMITE_DISTANCIA = 15;
+
 
 
 void setup() {
@@ -41,6 +43,8 @@ void setup() {
 
   pinMode(BUZZER_PIN, OUTPUT);
   pinMode(LED_VME_ALARME, OUTPUT);
+  pinMode(LED_AMA_ALARME, OUTPUT);
+  pinMode(LED_VDE_ALARME, OUTPUT);
   pinMode(BOTAO_FISICO, INPUT);
 
   Serial.begin(115200);
@@ -61,18 +65,12 @@ void setup() {
   // Vincula a função callback ao feed
   botaoalarme->onMessage(handleAlarme);
 
-  Serial.println();
-  Serial.println(io.statusText());
-
-  // Configuração do callack, quando o feed receber(atualizar) um valor
-  // botaoled -> onMessage(handleBotaoLed);
-  // Registra a função de callback
-  // Ela será chamada sempre que o feed receber um novo dado
+  Serial.println("Solicitando o estado inicial do alarme");
+  botaoalarme->get();
 }
 
 void loop() {
-
-  // // Manter a conexão com o Adafruit IO ativa
+  // Manter a conexão com o Adafruit IO ativa
   io.run();
 
   //leitura do botão físico
@@ -83,30 +81,35 @@ void loop() {
     botaoalarme->save(String(alarmeAtivo ? "true" : "false"));
     Serial.println(alarmeAtivo ? F("Alarme ARMADO pelo botao fisico") : F("Alarme DESARMADO pelo botao fisico"));
   }
+  if (alarmeAtivo) {  //Liga as luzes amarela se ativado e verde se desativado
+    digitalWrite(LED_VDE_ALARME, LOW);
+    digitalWrite(LED_VME_ALARME, LOW);
+    digitalWrite(LED_AMA_ALARME, HIGH);
+  } else {
+    digitalWrite(LED_AMA_ALARME, LOW);
+    digitalWrite(LED_VME_ALARME, LOW);
+    digitalWrite(LED_VDE_ALARME, HIGH);
+  }
 
   distancia = sonar.ping_cm();
   Serial.print("Distancia lida: ");
   Serial.print(distancia);
   Serial.println(" cm");
 
-  if(distancia != 0){
-    // só envia distancias válidas
-  distanciaultrassom -> save(distancia);
+  if (distancia != 0 && distancia != velhaDist) {
+    // só envia distancias válidas e novas
+    distanciaultrassom->save(distancia);
+    velhaDist = distancia;
   }
 
   //ativação ou desativação do alarme
-  if(alarmeAtivo && distancia > 0 && distancia < LIMITE_DISTANCIA) {
+  if (alarmeAtivo && distancia > 0 && distancia < LIMITE_DISTANCIA) {
+    while(alarmeAtivo && distancia > 0 && distancia < LIMITE_DISTANCIA){
     ativarAlerta();
-  } else {
+    }
+  } else if(alarmeAtivo) {
     desligarAlerta();
   }
 
-  // Chamada da função publish
-  // publicacao();
-
-  // Serial.print(F("Distancia Lida: "));
-  // Serial.println(sonar.ping_cm());
-  // delay(500);
-
-  delay(3000); // intervalo ideal para a Adafruit
+  delay(3000);
 }

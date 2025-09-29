@@ -40,7 +40,7 @@ void setup() {
   // pinMode(pinLed, OUTPUT);
 
   pinMode(BUZZER_PIN, OUTPUT);
-  pinMode(LED_ALARME, OUTPUT);
+  pinMode(LED_VME_ALARME, OUTPUT);
   pinMode(BOTAO_FISICO, INPUT);
 
   Serial.begin(115200);
@@ -55,15 +55,11 @@ void setup() {
     Serial.print(".");
     delay(500);
   }
-
   Serial.println("");
   Serial.println("Adafruit Conectado!");
 
   // Vincula a função callback ao feed
   botaoalarme->onMessage(handleAlarme);
-
-  Serial.println("Solicitando o estado inicial do alarme");
-  botaoalarme->get();
 
   Serial.println();
   Serial.println(io.statusText());
@@ -90,8 +86,8 @@ void loop() {
 
   distancia = sonar.ping_cm();
   Serial.print("Distancia lida: ");
-  Serial.println(distancia);
-  Serial.print(" cm");
+  Serial.print(distancia);
+  Serial.println(" cm");
 
   if(distancia != 0){
     // só envia distancias válidas

@@ -1,6 +1,6 @@
 void testeBuzzer(){
-  digitalWrite(pinBuzzer, HIGH);
+  digitalWrite(BUZZER_PIN, HIGH);
   delay(500);
-  digitalWrite(pinBuzzer, LOW);
+  digitalWrite(BUZZER_PIN, LOW);
   delay(500);
 }

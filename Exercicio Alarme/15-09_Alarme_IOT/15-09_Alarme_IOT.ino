@@ -4,7 +4,9 @@
 
 
 #define BUZZER_PIN 27
-#define LED_ALARME 13
+#define LED_VME_ALARME 13
+#define LED_AMA_ALARME 2
+#define LED_VDE_ALARME 4
 #define BOTAO_FISICO 26
 #define TRIG_PIN 12
 #define ECHO_PIN 14

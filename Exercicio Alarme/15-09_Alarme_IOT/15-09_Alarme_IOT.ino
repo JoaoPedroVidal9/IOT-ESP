@@ -96,7 +96,7 @@ void loop() {
   Serial.print(distancia);
   Serial.println(" cm");
 
-  if (distancia != 0 && distancia != velhaDist) {
+  if (distancia != velhaDist) {
     // só envia distancias válidas e novas
     distanciaultrassom->save(distancia);
     velhaDist = distancia;
@@ -107,6 +107,7 @@ void loop() {
     while(alarmeAtivo && distancia > 0 && distancia < LIMITE_DISTANCIA){
     ativarAlerta();
     }
+    digitalWrite(LED_AMA_ALARME, HIGH);
   } else if(alarmeAtivo) {
     desligarAlerta();
   }

@@ -59,7 +59,6 @@ void setup() {
     Serial.print(".");
     delay(500);
   }
-
   Serial.println("");
   Serial.println("Adafruit Conectado!");
 
@@ -68,8 +67,6 @@ void setup() {
 
   Serial.println("Solicitando o estado inicial do alarme");
   botaoalarme->get();
-  Serial.println();
-  Serial.println(io.statusText());
 }
 
 void loop() {
@@ -96,8 +93,8 @@ void loop() {
 
   distancia = sonar.ping_cm();
   Serial.print("Distancia lida: ");
-  Serial.println(distancia);
-  Serial.print(" cm");
+  Serial.print(distancia);
+  Serial.println(" cm");
 
   if (distancia != 0 && distancia != velhaDist) {
     // só envia distancias válidas e novas
